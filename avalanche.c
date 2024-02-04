@@ -7,16 +7,46 @@
 bool encoder_update_kb(uint8_t index, bool clockwise) {
     if (!encoder_update_user(index, clockwise)) { return false; }
     if (index == 0) {
-        if (clockwise) {
-            tap_code_delay(KC_VOLU, 10);
-        } else {
-            tap_code_delay(KC_VOLD, 10);
+        switch(biton32(layer_state)){
+            case 1:
+                if (clockwise) {
+                    tap_code(KC_MS_WH_RIGHT);
+                } else {
+                    tap_code(KC_MS_WH_LEFT);
+                }
+            case 2:
+                if (clockwise) {
+                    tap_code(KC_MS_WH_RIGHT);
+                } else {
+                    tap_code(KC_MS_WH_LEFT);
+                }
+            default:
+                if (clockwise) {
+                    tap_code(KC_MS_WH_DOWN);
+                } else {
+                    tap_code(KC_MS_WH_UP);
+                }
         }
     } else if (index == 1) { /* Second encoder */
-        if (clockwise) {
-            tap_code(KC_PGUP);
-        } else {
-            tap_code(KC_PGDN);
+        switch(biton32(layer_state)){
+            case 1:
+                if (clockwise) {
+                    tap_code(KC_UP);
+                } else {
+                    tap_code(KC_DOWN);
+                }
+            case 2:
+                if (clockwise) {
+                    tap_code(KC_UP);
+                } else {
+                    tap_code(KC_DOWN);
+                }
+            default:
+                if (clockwise) {
+                    tap_code(KC_LEFT);
+                } else {
+                    tap_code(KC_RGHT);
+                }
         }
     }
     return true;

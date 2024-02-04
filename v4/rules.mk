@@ -14,3 +14,5 @@ ENCODER_ENABLE = yes
 OLED_ENABLE = yes
 
 SPLIT_KEYBOARD = yes
+
+WPM_ENABLE = yes
