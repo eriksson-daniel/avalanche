@@ -25,3 +25,14 @@ See the [build environment setup](https://docs.qmk.fm/#/getting_started_build_to
 ## Bootloader
 
 Briefly press the button along the inner edge of the PCB next to the microcontroller.
+
+# Hilsen Daniel
+## Konvertere JSON keymap (fra QMK Configurator) til C
+```
+qmk json2c -o /c/users/daniel/qmk_firmware/keyboards/avalanche/v4/keymaps/default/keymap.c /c/users/daniel/qmk_firmware/keyboards/avalanche/daniel.json
+```
+
+## Kompilere
+```
+qmk compile -kb avalanche/v4 -km default
+```
