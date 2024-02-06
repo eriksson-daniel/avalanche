@@ -22,9 +22,27 @@ bool encoder_update_kb(uint8_t index, bool clockwise) {
                 }
             default:
                 if (clockwise) {
-                    tap_code(KC_MS_WH_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
                 } else {
-                    tap_code(KC_MS_WH_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
                 }
         }
     } else if (index == 1) { /* Second encoder */
