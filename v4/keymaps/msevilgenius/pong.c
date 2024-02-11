@@ -1,11 +1,16 @@
 #include "pong.h"
 #include <stdint.h>
 #include <timer.h>
+#include <print.h>
+#include "quantum.h"
 
-#ifdef OLED_DRIVER_ENABLE
-#include "oled_driver.h"
+
+
+
+
 #include <avr/pgmspace.h>
-#endif
+
+
 
 
 enum update_flag_bit {
@@ -97,17 +102,26 @@ void ball_update(void) {
     frame_elapsed = timer_elapsed(frame_timer);
 
     if (ball.velocity.x == 0) {
+        #ifdef CONSOLE_ENABLE
+        uprintf("ball not moving\n");
+        #endif
         frame_timer = timer_read();
         return;
     }
 
     if (frame_elapsed < (FRAME_TIME) / (ABS(ball.velocity.x))) {
+        #ifdef CONSOLE_ENABLE
+        uprintf("frame_elapsed: %d\n", frame_elapsed);
+        #endif
         return;
     }
 
     int8_t y_movement = (ball.velocity.y < 0 ? -1 : 1) * (ball.position.x % 3 < ABS(ball.velocity.y) ? 1 : 0);
 
     vec2_t new_ball_pos = { .x = ball.position.x + (ball.velocity.x < 0 ? -1 : 1), .y = ball.position.y + y_movement };
+
+
+
 
     if (new_ball_pos.x == 0) {
         // hit left edge
@@ -125,7 +139,7 @@ void ball_update(void) {
             pong_reset();
             return;
         }
-    } else if (new_ball_pos.x == (OLED_DISPLAY_WIDTH - 1)) {
+    } else if (new_ball_pos.x == (128 - 1)) {
         // hit right edge
         FLAG_SET(update_flag, update_player_right);
         int8_t collision_y = new_ball_pos.y - player_positions[player_right];
@@ -147,9 +161,9 @@ void ball_update(void) {
     if (new_ball_pos.y < 0){
         ball.velocity.y = -ball.velocity.y;
         new_ball_pos.y = -new_ball_pos.y;
-    } else if (new_ball_pos.y > OLED_DISPLAY_HEIGHT - 1) {
+    } else if (new_ball_pos.y > 64 - 1) {
         ball.velocity.y = -ball.velocity.y;
-        new_ball_pos.y += (OLED_DISPLAY_HEIGHT - 1) - new_ball_pos.y;
+        new_ball_pos.y += (64 - 1) - new_ball_pos.y;
     }
 
     prev_ball_pos.x = ball.position.x;
@@ -158,6 +172,9 @@ void ball_update(void) {
     ball.position.y = new_ball_pos.y;
 
     FLAG_SET(update_flag, update_ball);
+
+
+
 
     frame_timer = timer_read32();
 }
@@ -174,7 +191,10 @@ void ball_render_func(uint8_t *data, void *user_args) {
 
 
 void pong_frame() {
-#ifdef OLED_DRIVER_ENABLE
+#ifdef OLED_ENABLE
+#ifdef CONSOLE_ENABLE
+    uprintf("pong_frame\n");
+#endif
 
     if (FLAG_CHECK(update_flag, update_clear_all)){
         oled_clear();
@@ -188,36 +208,45 @@ void pong_frame() {
 
     // draw 'net'
     if (FLAG_CHECK(update_flag, update_net)){
-        oled_write_byte(NET_COLUMN, 0, 0x60);
-        oled_write_byte(NET_COLUMN, 1, 0x60);
-        oled_write_byte(NET_COLUMN, 2, 0x60);
-        oled_write_byte(NET_COLUMN, 3, 0x60);
-        oled_write_byte(NET_COLUMN, 4, 0x60);
-        oled_write_byte(NET_COLUMN, 5, 0x60);
-        oled_write_byte(NET_COLUMN, 6, 0x60);
-        oled_write_byte(NET_COLUMN, 7, 0x60);
+        oled_write_pixel(NET_COLUMN, 0, true);
+        oled_write_pixel(NET_COLUMN, 1, true);
+        oled_write_pixel(NET_COLUMN, 2, true);
+        oled_write_pixel(NET_COLUMN, 3, true);
+        oled_write_pixel(NET_COLUMN, 4, true);
+        oled_write_pixel(NET_COLUMN, 5, true);
+        oled_write_pixel(NET_COLUMN, 6, true);
+        oled_write_pixel(NET_COLUMN, 7, true);
         FLAG_CLEAR(update_flag, update_net);
     }
 
     // left paddle
     if (FLAG_CHECK(update_flag, update_player_left)) {
+        // uint8_t sub_pos = player_positions[0] % 8;
         uint8_t line = player_positions[0] / 8;
-        uint8_t sub_pos = player_positions[0] % 8;
-        oled_write_byte(0, line - 1, 0x00);
-        oled_write_byte(0, line, 0xFF << sub_pos);
-        oled_write_byte(0, line + 1, ~(0xFF << sub_pos));
+        oled_write_pixel(0, line - 1, true);
+        oled_write_pixel(0, line, true);
+        oled_write_pixel(0, line + 1, true);
+        oled_write_pixel(0, line + 2, true);
+        oled_write_pixel(0, line + 3, true);
+        oled_write_pixel(0, line + 4, true);
+        oled_write_pixel(0, line + 5, true);
+        oled_write_pixel(0, line + 6, true);
+        oled_write_pixel(0, line + 7, true);
+        oled_write_pixel(0, line + 8, true);
+        oled_write_pixel(0, line + 9, true);
+
         FLAG_CLEAR(update_flag, update_player_left);
     }
 
-    // right paddle
-    if (FLAG_CHECK(update_flag, update_player_right)) {
-        uint8_t line = player_positions[1] / 8;
-        uint8_t sub_pos = player_positions[1] % 8;
-        oled_write_byte(127, line - 1, 0x00);
-        oled_write_byte(127, line, 0xFF << sub_pos);
-        oled_write_byte(127, line + 1, ~(0xFF << sub_pos));
-        FLAG_CLEAR(update_flag, update_player_right);
-    }
+    // // right paddle
+    // if (FLAG_CHECK(update_flag, update_player_right)) {
+    //     uint8_t line = player_positions[1] / 8;
+    //     uint8_t sub_pos = player_positions[1] % 8;
+    //     oled_write_pixel(127, line - 1, true);
+    //     oled_write_pixel(127, line, 0xFF << sub_pos);
+    //     oled_write_pixel(127, line + 1, ~(0xFF << sub_pos));
+    //     FLAG_CLEAR(update_flag, update_player_right);
+    // }
 
     // scores
     if (FLAG_CHECK(update_flag, update_score_left)) {
@@ -239,15 +268,21 @@ void pong_frame() {
         // erase the previous position of the ball
         {
             uint8_t line = prev_ball_pos.y / 8;
-            oled_write_byte(prev_ball_pos.x, line, pre_ball_byte); // revert the display to its previous value
+            #ifdef CONSOLE_ENABLE
+            uprintf("prev_ball_pos: %d %d\n", prev_ball_pos.x, prev_ball_pos.y);
+            uprintf("line: %d\n", line);
+            #endif
+            oled_write_pixel(prev_ball_pos.x, line, false); // revert the display to its previous value
         }
 
         // draw the new position of the ball
         {
             uint8_t line = ball.position.y / 8;
-            uint8_t sub_pos = ball.position.y % 8;
-            uint8_t ball_byte = 0b00000001 << sub_pos;
-            oled_byte_apply_func(ball.position.x, line, ball_render_func, &ball_byte);
+            oled_write_pixel(prev_ball_pos.x, line, true); 
+
+            // uint8_t sub_pos = ball.position.y % 8;
+            // uint8_t ball_byte = 0b00000001 << sub_pos;
+            // oled_byte_apply_func(ball.position.x, line, ball_render_func, &ball_byte);
         }
         FLAG_CLEAR(update_flag, update_ball);
     }
