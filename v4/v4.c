@@ -20,9 +20,9 @@ bool oled_task_kb(void) {
         return false;
     }
     oled_write_P(PSTR("Daniels tastatur\n\n"), false);
-    // oled_write_P(PSTR("Ord per minutt: "), false);
+    oled_write_P(PSTR("Ord per minutt: "), false);
 
-    // oled_write(get_u8_str(get_current_wpm(), ' '), false);
+    oled_write(get_u8_str(get_current_wpm(), ' '), false);
 
     switch (get_highest_layer(layer_state)) {
         case _BASE:

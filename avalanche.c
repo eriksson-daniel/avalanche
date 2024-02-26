@@ -14,12 +14,24 @@ bool encoder_update_kb(uint8_t index, bool clockwise) {
                 } else {
                     tap_code(KC_MS_WH_LEFT);
                 }
+
+                return true;
             case 2:
                 if (clockwise) {
                     tap_code(KC_MS_WH_RIGHT);
                 } else {
                     tap_code(KC_MS_WH_LEFT);
                 }
+
+                return true;
+            case 4:
+                if (clockwise) {
+                    tap_code(KC_VOLD);
+                } else {
+                    tap_code(KC_VOLU);
+                }
+
+                return true;
             default:
                 if (clockwise) {
                     tap_code(KC_DOWN);
@@ -53,12 +65,16 @@ bool encoder_update_kb(uint8_t index, bool clockwise) {
                 } else {
                     tap_code(KC_DOWN);
                 }
+            
+                return true;
             case 2:
                 if (clockwise) {
                     tap_code(KC_UP);
                 } else {
                     tap_code(KC_DOWN);
                 }
+            
+                return true;
             default:
                 if (clockwise) {
                     tap_code(KC_LEFT);
@@ -70,4 +86,3 @@ bool encoder_update_kb(uint8_t index, bool clockwise) {
     return true;
 }
 #endif
-
