@@ -10,17 +10,9 @@ bool encoder_update_kb(uint8_t index, bool clockwise) {
         switch(biton32(layer_state)){
             case 1:
                 if (clockwise) {
-                    tap_code(KC_MS_WH_RIGHT);
+                    tap_code(KC_LEFT);
                 } else {
-                    tap_code(KC_MS_WH_LEFT);
-                }
-
-                return true;
-            case 2:
-                if (clockwise) {
-                    tap_code(KC_MS_WH_RIGHT);
-                } else {
-                    tap_code(KC_MS_WH_LEFT);
+                    tap_code(KC_RGHT);
                 }
 
                 return true;
@@ -34,53 +26,60 @@ bool encoder_update_kb(uint8_t index, bool clockwise) {
                 return true;
             default:
                 if (clockwise) {
-                    tap_code(KC_DOWN);
-                    tap_code(KC_DOWN);
-                    tap_code(KC_DOWN);
-                    tap_code(KC_DOWN);
-                    tap_code(KC_DOWN);
-                    tap_code(KC_DOWN);
-                    tap_code(KC_DOWN);
-                    tap_code(KC_DOWN);
-                    tap_code(KC_DOWN);
-                    tap_code(KC_DOWN);
+                    tap_code(KC_UP);
                 } else {
-                    tap_code(KC_UP);
-                    tap_code(KC_UP);
-                    tap_code(KC_UP);
-                    tap_code(KC_UP);
-                    tap_code(KC_UP);
-                    tap_code(KC_UP);
-                    tap_code(KC_UP);
-                    tap_code(KC_UP);
-                    tap_code(KC_UP);
-                    tap_code(KC_UP);
+                    tap_code(KC_DOWN);
                 }
+
+                return true;
+
         }
     } else if (index == 1) { /* Second encoder */
         switch(biton32(layer_state)){
-            case 1:
-                if (clockwise) {
-                    tap_code(KC_UP);
-                } else {
-                    tap_code(KC_DOWN);
-                }
-            
-                return true;
             case 2:
                 if (clockwise) {
-                    tap_code(KC_UP);
+                    tap_code(KC_TAB);
                 } else {
-                    tap_code(KC_DOWN);
+                    register_code(KC_LEFT_SHIFT);
+                    tap_code(KC_TAB);
+                    unregister_code(KC_LEFT_SHIFT);
                 }
             
                 return true;
+            case 4:
+                if (clockwise) {
+                    tap_code(KC_VOLD);
+                } else {
+                    tap_code(KC_VOLU);
+                }
+
+                return true;    
             default:
                 if (clockwise) {
-                    tap_code(KC_LEFT);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
                 } else {
-                    tap_code(KC_RGHT);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
                 }
+
+                return true;
         }
     }
     return true;
