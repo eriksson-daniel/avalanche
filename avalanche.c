@@ -7,12 +7,12 @@
 bool encoder_update_kb(uint8_t index, bool clockwise) {
     if (!encoder_update_user(index, clockwise)) { return false; }
     if (index == 0) {
-        switch(biton32(layer_state)){
+        switch(biton32(layer_state)) {
             case 1:
                 if (clockwise) {
-                    tap_code(KC_LEFT);
-                } else {
                     tap_code(KC_RGHT);
+                } else {
+                    tap_code(KC_LEFT);
                 }
 
                 return true;
@@ -38,11 +38,11 @@ bool encoder_update_kb(uint8_t index, bool clockwise) {
         switch(biton32(layer_state)){
             case 2:
                 if (clockwise) {
-                    tap_code(KC_TAB);
-                } else {
                     register_code(KC_LEFT_SHIFT);
                     tap_code(KC_TAB);
                     unregister_code(KC_LEFT_SHIFT);
+                } else {
+                    tap_code(KC_TAB);
                 }
             
                 return true;
@@ -56,27 +56,27 @@ bool encoder_update_kb(uint8_t index, bool clockwise) {
                 return true;    
             default:
                 if (clockwise) {
-                    tap_code(KC_DOWN);
-                    tap_code(KC_DOWN);
-                    tap_code(KC_DOWN);
-                    tap_code(KC_DOWN);
-                    tap_code(KC_DOWN);
-                    tap_code(KC_DOWN);
-                    tap_code(KC_DOWN);
-                    tap_code(KC_DOWN);
-                    tap_code(KC_DOWN);
-                    tap_code(KC_DOWN);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
+                    tap_code(KC_UP);
                 } else {
-                    tap_code(KC_UP);
-                    tap_code(KC_UP);
-                    tap_code(KC_UP);
-                    tap_code(KC_UP);
-                    tap_code(KC_UP);
-                    tap_code(KC_UP);
-                    tap_code(KC_UP);
-                    tap_code(KC_UP);
-                    tap_code(KC_UP);
-                    tap_code(KC_UP);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
+                    tap_code(KC_DOWN);
                 }
 
                 return true;
